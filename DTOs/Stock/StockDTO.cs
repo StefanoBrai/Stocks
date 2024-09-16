@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using ProgettoWebAPI_Stocks.DTOs.Comment;
 using ProgettoWebAPI_Stocks.Models;
 
 namespace ProgettoWebAPI_Stocks.DTOs.Stock
@@ -16,5 +17,6 @@ namespace ProgettoWebAPI_Stocks.DTOs.Stock
         public decimal LastDiv { get; set; }
         public string Industry { get; set; } = string.Empty;
         public long MarketCap { get; set; }
+        public List<CommentDTO> Comments { get; set; }
     }
 }

@@ -15,13 +15,13 @@ namespace ProgettoWebAPI_Stocks.Controllers
 {
     [Route("api/stock")]
     [ApiController]
-    public class StackController : Controller
+    public class StockController : Controller
     {
-        private readonly ILogger<StackController> _logger;
+        private readonly ILogger<StockController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IStockRepository _stockRepository;
 
-        public StackController(ILogger<StackController> logger, ApplicationDbContext context, IStockRepository stockRepository)
+        public StockController(ILogger<StockController> logger, ApplicationDbContext context, IStockRepository stockRepository)
         {
             _logger = logger;
             _context = context;

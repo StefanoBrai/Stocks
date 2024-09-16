@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ProgettoWebAPI_Stocks.Data;
 using ProgettoWebAPI_Stocks.Interfaces;
 using ProgettoWebAPI_Stocks.Repository;
@@ -11,6 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// NewtonsoftJson
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+);
+
 // ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     options.UseSqlServer(
@@ -19,7 +25,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 });
 
 // Interface - Repository
-    builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 var app = builder.Build();
 

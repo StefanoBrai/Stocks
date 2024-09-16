@@ -13,6 +13,7 @@ namespace ProgettoWebAPI_Stocks.Interfaces
         Task<Stock?> GetByIdAsync(int id);
         Task<Stock> CreateAsync(Stock stockModel);
         Task<Stock?> UpdateAsync(int id, UpdateStockDTO updateStockDTO);
-        Task<Stock?> DeleteAsync(int id); 
+        Task<Stock?> DeleteAsync(int id);
+        Task<bool> StockExist(int id);
     }
 }
