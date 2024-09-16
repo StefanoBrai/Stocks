@@ -19,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 });
 
 // Interface - Repository
-builder.Services.AddScoped<IStockRepository, StockRepository>();
+    builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();
 

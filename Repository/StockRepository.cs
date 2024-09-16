@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProgettoWebAPI_Stocks.Data;
+using ProgettoWebAPI_Stocks.DTOs.Stock;
 using ProgettoWebAPI_Stocks.Interfaces;
 using ProgettoWebAPI_Stocks.Models;
 
@@ -16,9 +17,59 @@ namespace ProgettoWebAPI_Stocks.Repository
         {
             _context = context;
         }
+
+        public async Task<Stock> CreateAsync(Stock stockModel)
+        {
+            await _context.AddAsync(stockModel);
+            await _context.SaveChangesAsync();
+
+            return stockModel;
+        }
+
+        public async Task<Stock?> DeleteAsync(int id)
+        {
+            var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+            
+            if (stockModel == null) 
+            {
+                return null;
+            }
+
+            _context.Stock.Remove(stockModel);
+            _context.SaveChanges();
+
+            return stockModel;
+        }
+
         public async Task<List<Stock>> GetAllAsync()
         {
             return await _context.Stock.ToListAsync();
+        }
+
+        public async Task<Stock?> GetByIdAsync(int id)
+        {
+            return await _context.Stock.FindAsync(id);
+        }
+
+        public async Task<Stock?> UpdateAsync(int id, UpdateStockDTO updateStockDTO)
+        {
+            var existingStockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingStockModel == null)
+            {
+                return null;
+            }
+
+            existingStockModel.Symbol = updateStockDTO.Symbol;
+            existingStockModel.CompanyName = updateStockDTO.CompanyName;
+            existingStockModel.Purchase = updateStockDTO.Purchase;
+            existingStockModel.LastDiv = updateStockDTO.LastDiv;
+            existingStockModel.Industry = updateStockDTO.Industry;
+            existingStockModel.MarketCap = updateStockDTO.MarketCap;
+
+            await _context.SaveChangesAsync();
+
+            return existingStockModel;
         }
     }
 }
