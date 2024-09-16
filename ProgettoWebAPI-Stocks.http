@@ -1,0 +1,6 @@
+@ProgettoWebAPI_Stocks_HostAddress = http://localhost:5052
+
+GET {{ProgettoWebAPI_Stocks_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
