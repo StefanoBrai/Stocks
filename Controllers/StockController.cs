@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProgettoWebAPI_Stocks.Data;
 using ProgettoWebAPI_Stocks.DTOs.Stock;
+using ProgettoWebAPI_Stocks.Helpers;
 using ProgettoWebAPI_Stocks.Interfaces;
 using ProgettoWebAPI_Stocks.Mappers;
 
@@ -29,14 +30,14 @@ namespace ProgettoWebAPI_Stocks.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stocks = await _stockRepository.GetAllAsync();
+            var stocks = await _stockRepository.GetAllAsync(query);
             var stockDTOs = stocks.Select(s => s.ToStockDTO());
 
             return Ok(stockDTOs);
