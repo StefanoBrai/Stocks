@@ -11,5 +11,7 @@ namespace ProgettoWebAPI_Stocks.Helpers
         public string? CompanyName { get; set; } = null;
         public string? SortBy { get; set; } = null;
         public bool IsDescending { get; set; } = false;
+        public int PageNumer { get; set; } = 1;
+        public int PageSize { get; set; } = 20;
     }
 }
