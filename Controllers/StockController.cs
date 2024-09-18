@@ -19,13 +19,11 @@ namespace ProgettoWebAPI_Stocks.Controllers
     public class StockController : Controller
     {
         private readonly ILogger<StockController> _logger;
-        private readonly ApplicationDbContext _context;
         private readonly IStockRepository _stockRepository;
 
-        public StockController(ILogger<StockController> logger, ApplicationDbContext context, IStockRepository stockRepository)
+        public StockController(ILogger<StockController> logger, IStockRepository stockRepository)
         {
             _logger = logger;
-            _context = context;
             _stockRepository = stockRepository;
         }
 

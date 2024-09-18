@@ -47,6 +47,7 @@ namespace ProgettoWebAPI_Stocks.Repository
         {
             var stocks = _context.Stock.Include(c => c.Comments).AsQueryable();
 
+            // Filter
             if (!string.IsNullOrWhiteSpace(query.Symbol))
             {
                 stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
@@ -57,6 +58,7 @@ namespace ProgettoWebAPI_Stocks.Repository
                 stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
             }
 
+            // Sorting
             if (!string.IsNullOrWhiteSpace(query.SortBy))
             {
                 if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
@@ -70,6 +72,7 @@ namespace ProgettoWebAPI_Stocks.Repository
                 }
             }
 
+            // Pagination
             var skipNumber = (query.PageNumer - 1) * query.PageSize;
 
             return await stocks.Skip(skipNumber).Take(query.PageSize).ToListAsync();
