@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,7 @@ using ProgettoWebAPI_Stocks.Mappers;
 
 namespace ProgettoWebAPI_Stocks.Controllers
 {
+    [Authorize]
     [Route("api/stock")]
     [ApiController]
     public class StockController : Controller
