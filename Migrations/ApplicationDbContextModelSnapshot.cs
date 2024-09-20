@@ -51,13 +51,13 @@ namespace ProgettoWebAPI_Stocks.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8dfa968c-ed02-446d-b27c-bb748e2ae36e",
+                            Id = "e3d9767f-7e37-4ae7-82c0-ac9169445bd3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "77eda124-f759-4c5b-8435-dae03f024fb1",
+                            Id = "56d9f220-4494-41fb-b04c-c681ed2aefe3",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -242,6 +242,10 @@ namespace ProgettoWebAPI_Stocks.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -258,9 +262,26 @@ namespace ProgettoWebAPI_Stocks.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.HasIndex("StockId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Portfolio", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "StockId");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("Portfolios");
                 });
 
             modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Stock", b =>
@@ -294,7 +315,7 @@ namespace ProgettoWebAPI_Stocks.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stock");
+                    b.ToTable("Stocks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -350,16 +371,50 @@ namespace ProgettoWebAPI_Stocks.Migrations
 
             modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Comment", b =>
                 {
+                    b.HasOne("ProgettoWebAPI_Stocks.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProgettoWebAPI_Stocks.Models.Stock", "Stock")
                         .WithMany("Comments")
                         .HasForeignKey("StockId");
 
+                    b.Navigation("AppUser");
+
                     b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Portfolio", b =>
+                {
+                    b.HasOne("ProgettoWebAPI_Stocks.Models.AppUser", "AppUser")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProgettoWebAPI_Stocks.Models.Stock", "Stock")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.AppUser", b =>
+                {
+                    b.Navigation("Portfolios");
                 });
 
             modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Stock", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }

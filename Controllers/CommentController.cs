@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProgettoWebAPI_Stocks.DTOs.Comment;
+using ProgettoWebAPI_Stocks.Extensions;
 using ProgettoWebAPI_Stocks.Interfaces;
 using ProgettoWebAPI_Stocks.Mappers;
+using ProgettoWebAPI_Stocks.Models;
 
 namespace ProgettoWebAPI_Stocks.Controllers
 {
@@ -18,12 +21,14 @@ namespace ProgettoWebAPI_Stocks.Controllers
         private readonly ILogger<CommentController> _logger;
         private readonly ICommentRepository _commentRepository;
         private readonly IStockRepository _stockRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CommentController(ILogger<CommentController> logger, ICommentRepository commentRepository, IStockRepository stockRepository)
+        public CommentController(ILogger<CommentController> logger, ICommentRepository commentRepository, IStockRepository stockRepository, UserManager<AppUser> userManager)
         {
             _logger = logger;
             _commentRepository = commentRepository;
             _stockRepository = stockRepository;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -72,7 +77,12 @@ namespace ProgettoWebAPI_Stocks.Controllers
                 return BadRequest("Stock does not exist");
             }
 
+            // Find user
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
+
             var commentModel = createDTO.ToCommentFromCreate(stockId);
+            commentModel.AppUserId = appUser.Id;
 
             await _commentRepository.CreateAsync(commentModel);
 

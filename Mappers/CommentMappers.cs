@@ -17,6 +17,7 @@ namespace ProgettoWebAPI_Stocks.Mappers
                 Title = comment.Title,
                 Content = comment.Content,
                 CreatedOn = comment.CreatedOn,
+                CreatedBy = comment.AppUser.UserName,
                 StockId = comment.StockId
             };
         }

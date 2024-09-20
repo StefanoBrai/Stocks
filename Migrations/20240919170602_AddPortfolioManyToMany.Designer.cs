@@ -12,8 +12,8 @@ using ProgettoWebAPI_Stocks.Data;
 namespace ProgettoWebAPI_Stocks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240919140408_SeedRole")]
-    partial class SeedRole
+    [Migration("20240919170602_AddPortfolioManyToMany")]
+    partial class AddPortfolioManyToMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace ProgettoWebAPI_Stocks.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8dfa968c-ed02-446d-b27c-bb748e2ae36e",
+                            Id = "0c5782ad-188b-460c-9a1e-2eb6d1734608",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "77eda124-f759-4c5b-8435-dae03f024fb1",
+                            Id = "08395c5a-56eb-4515-9d34-90d25143dacd",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -266,6 +266,21 @@ namespace ProgettoWebAPI_Stocks.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Portfolio", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "StockId");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("Portfolios");
+                });
+
             modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -297,7 +312,7 @@ namespace ProgettoWebAPI_Stocks.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stock");
+                    b.ToTable("Stocks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -360,9 +375,35 @@ namespace ProgettoWebAPI_Stocks.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Portfolio", b =>
+                {
+                    b.HasOne("ProgettoWebAPI_Stocks.Models.AppUser", "AppUser")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProgettoWebAPI_Stocks.Models.Stock", "Stock")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.AppUser", b =>
+                {
+                    b.Navigation("Portfolios");
+                });
+
             modelBuilder.Entity("ProgettoWebAPI_Stocks.Models.Stock", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }

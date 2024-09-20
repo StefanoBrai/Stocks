@@ -38,7 +38,7 @@ namespace ProgettoWebAPI_Stocks.Controllers
             }
 
             var stocks = await _stockRepository.GetAllAsync(query);
-            var stockDTOs = stocks.Select(s => s.ToStockDTO());
+            var stockDTOs = stocks.Select(s => s.ToStockDTO()).ToList();
 
             return Ok(stockDTOs);
         }
